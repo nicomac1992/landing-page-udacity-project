@@ -1,118 +1,77 @@
-/**
- *
- * Manipulating the DOM exercise.
- * Exercise programmatically builds navigation,
- * scrolls to anchors from navigation,
- * and highlights section in viewport upon scrolling.
- *
- * Dependencies: None
- *
- * JS Version: ES2015/ES6
- *
- * JS Standard: ESlint
- *
- */
+// these are the global navigation and section variables
+const navbarMenu = document.getElementById("navbar__list");
 
-/**
- * Define Global Variables
- *
- */
-
-// navigation  variable
-const navigation = document.getElementById("navbar__list");
-
-// sections variable
-const sections = document.querySelectorAll("section");
-
-/**
- * End Global Variables
- * Start Helper Functions
- *
- */
-
-/**
- * End Helper Functions
- * Begin Main Functions
- *
- */
-
+const everySection = document.querySelectorAll("section");
 
 // building the navigation
 
-const navBuild = () => {
-    let navUI = "";
-    // loops through all the sections
-    sections.forEach((section) => {
-        const sectionID = section.id;
-        const sectionDataNav = section.dataset.nav;
+const navigationBuilder = () => {
+    let navigation = "";
 
-        navUI += `<li><a class="menu__link" href="#${sectionID}">${sectionDataNav}</a></li>`;
+    // this will loop through each section
+    everySection.forEach((section) => {
+        const ID = section.id;
+        const navigationData = section.dataset.nav;
+
+        navigation += `<li><a class= "menu__link" href="#${ID}">${navigationData}</a></li>`;
     });
-    // appends elements to the navigation
-    navigation.innerHTML = navUI;
+    navbarMenu.innerHTML = navigation;
 };
 
-navBuild();
+navigationBuilder();
 
-// Add class 'active' to section when near top of viewport
-
-// returns the largest value that's less or equal to the number
-const offset = (section) => {
+// gets largest value that is less than or equal to number
+const set = (section) => {
     return Math.floor(section.getBoundingClientRect().top);
 };
 
 // remove the active class
-const removeActive = (section) => {
+const removeActiveClass = (section) => {
     section.classList.remove("your-active-class");
-    section.style.cssText =
-        "background-color: goldenrod";
+    section.style.cssText = "background-color: goldenrod";
 };
+
 // adds the active class
-const addActive = (conditional, section) => {
+const addActiveClass = (conditional, section) => {
     if (conditional) {
         section.classList.add("your-active-class");
-        section.style.cssText = "background-color: black;";
+        section.style.cssText = "background-color: black";
     }
 };
 
-//implementation of the function
+// function to add the active class
+const activatingTheSection = () => {
+    everySection.forEach((section) => {
+        const elOffSet = set(section);
 
-const sectionActivate = () => {
-    sections.forEach((section) => {
-        const elementOffset = offset(section);
+        inviewport = () => elOffSet < 100 && elOffSet >= -100;
 
-        inviewport = () => elementOffset < 150 && elementOffset >= -150;
+        removeActiveClass(section);
 
-        removeActive(section);
-        addActive(inviewport(), section);
+        addActiveClass(inviewport(), section);
     });
 };
 
-window.addEventListener("scroll", sectionActivate);
+window.addEventListener("scroll", activatingTheSection);
 
-// Scroll to anchor ID using scrollTO event
+//Getting the button
+const myButton = document.getElementById("myBtn");
 
-const scrolling = () => {
-    const links = document.querySelectorAll(".navbar__menu a");
-    links.forEach((link) => {
-        link.addEventListener("click", () => {
-            for (i = 0; i < sections; i++) {
-                sections[i].addEventListener("click", sectionScroll(link));
-            }
-        });
-    });
+// When user scrolls 20px down from the top
+window.onscroll = function() {
+    scrollFunction();
 };
 
-scrolling();
+function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        myButton.style.display = "block";
+    } else {
+        myButton.style.display = "none";
+    }
+}
 
-/**
- * End Main Functions
- * Begin Events
- *
- */
-
-// Build menu
-
-// Scroll to section on link click
-
-// Set sections as active
+// When you click on the button, it will take you to the top of the page.
+function topFunction() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+}
